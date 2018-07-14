@@ -1,0 +1,41 @@
+.\" Copyright (c) 2017 Parth Sethi
+
+.\"	@(#)get_class
+.\"
+.TH GET CLASS 2 
+.UC 4
+.SH NAME
+get class \- gets value for classification for new file structure
+.SH SYNOPSIS
+.nf
+.ft B
+#include <stdio.h>
+
+int get_class(FILE *fd)
+.ft R
+.fi
+.SH DESCRIPTION
+Gets the value of classification for files in new file structure, and it fails if file pointer is invalid, or file belongs to old file structure. fp is pointer to file which we want to get classification.
+
+.RE
+.SH "RETURN VALUE
+A successful call to get_class(F) that immediately follows a successful call 
+to set_class(F,v) shall return the value v (i.e., the set_class call shall 
+change the value of class for file F to v, which will be returned when
+get_class is called). 
+Otherwise, a value of \-1 is returned to indicate the error.
+.SH ERRORS
+get_class() call will fail if the file points to old file system, or there is invalid file descriptor.
+
+.SH Access Control
+If the file open requests read access, then
+the tag of P must be greater than or equal to the classification of F. 
+If the file open requests write or append access, then the tag of P must 
+be less than or equal to the classification of F. If a file is created
+then the file classification is equal to the tag value of the process
+that created it. 
+
+.SH "SEE ALSO"
+.BR set_class (2)
+.SH AUTHOR
+Parth Sethi 

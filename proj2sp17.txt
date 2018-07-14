@@ -1,0 +1,172 @@
+Project 2
+
+COP 4600 
+Spring 2017
+
+Due: Feb 25 (patch file, code, report on Canvas)
+We may require you to demo by signup on Doodle poll (see Canvas).
+
+Brief Description:
+Implement a new system call in Minix 3.2.1, along with two library functions 
+in the system library that allow it to be called from a C program. 
+We will provide C programs that exercise and demonstrate the new call. 
+In addition, modify the access control checks within Minix to perform
+new checks when a process tries to open a file.
+
+Be prepared to demonstrate the system call by building your modified Minix 3 
+with the new system call, compiling our demo program, then running the demo 
+program on your modified Minix 3 for the TA during the slot that you reserved. 
+Be prepared to discuss what you did, what problems you faced, how you solved
+them, what files you modified, and what you learned. 
+
+Details of System Call:
+You will first modify the file system's inode structure to include a new 
+integer value, classification, initialized to the tag value of the process
+that created the file on creation. 
+The new system call will allow 
+(a) the value of classification to be read by any process 
+(b) the value of classification to be written by a process with root access
+
+Library procedures:
+You will also implement library procedures that can be referenced by 
+a C program to demonstrate the call. These must be included in the system
+library so that compiling a C program that references them will work (i.e., 
+the references to these calls will be resolved). 
+
+The library procedures will have prototypes
+int set_class(FILE* fd, int newvalue);
+int get_class(FILE* fd); 
+Both will return the value of classification, or an error (-1). 
+
+The argument fd is a file descriptor as returned by fopen() for the file
+whose classification is to be accessed, and newvalue will be the new value 
+of the non-negative classification. 
+A successful call to get_class(F) that immediately follows a successful call 
+to set_class(F,v) shall return the value v (i.e., the set_class call shall 
+change the value of class for file F to v, which shall be returned when
+get_class is called). 
+
+Both the get_class() and the set_class() call shall fail if the file 
+descriptor is invalid.
+
+The set_class() call shall fail if the calling process does not have 
+root access (EUID = 0).  The set_class() call shall also fail if 
+newvalue is negative. 
+
+Failure shall be indicated by a return value of -1.
+Appropriate error codes should be added if need be to the error numbers
+in the system, and errno should be set accordingly on failure. You 
+should also do this for the set_tag and get_tag calls from Project 1.
+
+Access Control Checks
+
+You must modify the File System to check the tag of any process P that
+attempts to open a file F. If the file open requests read access, then
+the tag of P must be greater than or equal to the classification of F. 
+If the file open requests write or append access, then the tag of P must 
+be less than or equal to the classification of F. If a file is created
+then the file classification must be set to the tag value of the process
+that created it. This partially implements the BLP access control model. 
+
+Test program:
+We will supply one or more simple test programs, but you may want to 
+implement your own program(s) for testing. 
+Our test program must compile using the system library after you have
+modified your Minix VM. 
+
+Documentation:
+You will provide the following two documents. 
+
+man page - a manual page for your library procedures in man page format 
+(you may copy and modify an existing man page for this purpose). You must
+place the new man page in the proper location so that entering the command
+man set_class or man get_class return the man page for these calls. 
+
+Report (may be pdf, doc, docx, or txt) - this document will explain how you 
+implemented the new system call, including what changes were made to which 
+files and why each change was made.  It will include description of how 
+testing was performed along with any known bugs.
+
+Submission:
+You will submit 
+- patch file(s) including all the changes made from a fresh installation 
+of Minix 3.2.1 to existing Minix files needed to support the new call 
+(note that this includes any changes to makefiles also and the changes
+needed for Project 1, as ammended)
+- all new source files you created, along with all test files 
+- makefile to move files to the correct location (including man pages),
+	apply patches, remake the system, and make the test program(s)
+- man page(s)
+- report
+
+Applying the patches and remaking the necessary parts of Minix, then
+rebooting and typing "make test" in the directory with the test code
+should compile the test program and link in the new library object code. 
+
+Demonstration:
+You may be required to give a demonstration. If this is the case, then
+you will sign up to demonstrate your code to a TA on the Doodle poll we will
+set up and make available on Canvas.  You will have 10 minutes to demo and to 
+answer questions.  Do not be late for your demo. Missed demo appointments will 
+deduct 3 points from your score for each missed appointment (late is defined 
+as 1 or more minutes late). 
+
+Helpful resources:
+The Minix3.org website has many helpful documents, and we will add documents 
+to the class website of a more specific nature.  
+
+
+Detailed Rubric
+Project 2:		
+Doc 10		
+	Report	
+	1	clear &	organized
+	1	files modified
+	1	What done
+	1	Why done
+	1	Testing
+	1	Bugs
+	Man page	
+	1	called from man
+	1	header, section
+	1	synopsis
+	1	description
+		
+Code 10		
+	1	structure
+	2	comments
+	2	identifiers
+	2	no manifest constants
+	1	easy to understand/maintain
+	2	patch file works correctly
+		
+Functionality 20		
+	*	build works
+	1	make test works
+	2	uses system library
+	set_class	
+	2	user process can't change
+	2	root process can change
+	2	tag initialized to 0 for new file 
+	1	fd invalid fails
+	1	negative class fails
+	1	errno set correctly
+	get_class	
+	2	any process can read class 
+	1	fd invalid fails
+	1	errno set correctly
+	access control
+	2	process cannot read down
+	2	process cannot write up
+		
+Demo 10	(or distribute elsewhere if no demo)
+	2	Code explained
+	8	Questions answered well 
+
+Penalties
+	-1	point per day or partial day late
+	-3	points per missed/late show for demo
+	-3	points for reserving multiple demo slots
+	-20	if code does not compile and run properly
+	-50 and a trip to the Honor Court for sharing code
+

@@ -1,0 +1,67 @@
+all:
+
+	patch /usr/src/servers/pm/table.c table_diff.txt
+
+	patch /usr/src/servers/pm/Makefile makefile_diff.txt
+
+	patch /usr/src/lib/libc/sys-minix/Makefile.inc Makefileinc_diff.inc
+	
+	patch /usr/src/servers/pm/proto.h proto_diff.txt
+
+	patch /usr/src/include/unistd.h unistd_diff.txt
+
+	patch /usr/src/servers/vfs/Makefile vfs_MAkefile_diff
+
+	patch /usr/src/servers/vfs/table.c table_diff.c
+
+	patch /usr/src/include/minix/callnr.h callnr_diff.h
+
+	patch /usr/src/include/minix/vfsif.h vfsif_diff.h
+
+	patch /usr/src/include/stdio.h stdio_diff.h
+
+        patch /usr/src/servers/vfs/request.c request_diff.c
+
+	patch /usr/src/servers/pm/mproc.h mproc_diff.txt
+
+        patch /usr/src/servers/vfs/read.c read_diff.c
+
+        patch /usr/src/servers/vfs/proto.h proto_diff.h
+
+        patch /usr/src/servers/vfs/open.c open_diff.h
+
+        patch /usr/src/servers/mfs/table.c mfs_table_diff.c
+
+        patch /usr/src/servers/mfs/read.c mfs_read_diff.c
+
+        patch /usr/src/servers/mfs/proto.h mfs_proto_diff.h
+
+        patch /usr/src/lib/libc/stdio/fopen.c fopen_diff.c
+
+	cp do_tag.c  /usr/src/servers/pm
+
+	cp set_tag.c /usr/src/lib/libc/sys-minix
+
+	cp get_tag.c /usr/src/lib/libc/sys-minix
+
+	cp set_tag.2 /usr/man/man2
+
+	cp get_tag.2 /usr/man/man2
+
+	cp do_class.c  /usr/src/servers/vfs
+
+	cp set_class.c /usr/src/lib/libc/sys-minix
+
+	cp get_class.c /usr/src/lib/libc/sys-minix
+
+	cp set_class.2 /usr/man/man2
+
+	cp get_class.2 /usr/man/man2	
+
+	cd /usr/src/releasetools && make services && make install
+	
+	cd /usr/src && make build && reboot 
+
+test:
+	cc /root/project2/p2_test.c -o /root/project2/p
+	cc p2_test.c -o p

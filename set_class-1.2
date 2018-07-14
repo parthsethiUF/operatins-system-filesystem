@@ -1,0 +1,42 @@
+.\" Copyright (c) 2017 University of Florida.
+.\"
+.\"	@(#)set_tag.2	6.3 (Parth) 2017
+.\"
+.TH set_class 2 "UF 2017"
+
+.SH NAME
+set_class sets a classification for file 
+.SH SYNOPSIS
+.nf
+.ft B
+#include <stdio.h>
+
+int set_class(FILE *fd, int newvalue);
+.ft R
+.fi
+.SH DESCRIPTION
+The set_class function ets a classification for file, given the user is the root user
+rest of users can not set any class.
+The fd is file pointer to file whose class is to be 
+set,
+the newValue is the classification that has to be set for the file with value ' which
+is a non negative value.
+
+.RE
+.SH "RETURN VALUE
+Upon successful completion, a value ofclassification is returned though it is not needed.
+Otherwise, a value of \-1 is returned to indicate the error.
+.SH ERRORS
+set_class() call will fail if the file pointer refers to an NULL or newValue is negative.
+.SH Access Control
+If the file open requests read access, then
+the tag of P must be greater than or equal to the classification of F. 
+If the file open requests write or append access, then the tag of P must 
+be less than or equal to the classification of F. If a file is created
+then the file classification is equal to the tag value of the process
+that created it. 
+
+.SH "SEE ALSO"
+.BR get_class (2)
+.SH AUTHOR
+Parth Sethi 
